@@ -11,9 +11,10 @@ namespace gdr {
 
 /*!
  * Sorts items between [first, last).
- * \param[in] first initial position.
- * \param[in] last final position.
- * \return none
+ * @tparam RandomAccessIterator
+ * @param first first initial position.
+ * @param last final position.
+ * @return none
  * Complexity:
  *  average n * log(n);
  *  worst case O(n^2).
@@ -45,5 +46,75 @@ void QuickSort(RandomAccessIterator first, RandomAccessIterator last) {
   }
   QuickSort(left_border + 1, base_it);
   QuickSort(base_it + 1, last);
+}
+
+/*!
+ * Concatenates two adjacent parts of an array with sorting
+ * @tparam RandomAccessIterator
+ * @param first1 initial position 1
+ * @param last1 final position 2
+ * @param first2 initial position 2
+ * @param last2 final position 2
+ * @return none
+ * Complexity:
+ *  worst case O(n).
+ */
+
+template<class RandomAccessIterator>
+void Merge(RandomAccessIterator first1, RandomAccessIterator last1,
+           RandomAccessIterator first2, RandomAccessIterator last2) {
+  using value_type = typename std::iterator_traits<
+    RandomAccessIterator>::value_type;
+
+  auto begin = first1;
+  auto len = (last1 - first1) + (last2 - first2);
+  std::vector<value_type> b;
+
+  b.reserve(len);
+  while (first1 != last1 && first2 != last2) {
+    if (*first2 < *first1) {
+      b.emplace_back(*first2);
+      ++first2;
+    } else {
+      b.emplace_back(*first1);
+      ++first1;
+    }
+  }
+  while (first1 != last1) {
+    b.emplace_back(*first1);
+    ++first1;
+  }
+  while (first2 != last2) {
+    b.emplace_back(*first2);
+    ++first2;
+  }
+  for (auto &i : b) {
+    *begin = i;
+    ++begin;
+  }
+}
+
+/*!
+ * Sorts items between [first, last).
+ * @tparam RandomAccessIterator
+ * @param first initial position.
+ * @param last final position.
+ * @return none
+ * Complexity:
+ *  average n * log(n);
+ *  worst case O(n * log(n)).
+ */
+
+template<class RandomAccessIterator>
+void MergeSort(RandomAccessIterator first, RandomAccessIterator last) {
+  auto len = last - first;
+
+  if (len < 2) {
+    return;
+  }
+  auto half = first + len / 2 + (len % 2);
+  MergeSort(first, half);
+  MergeSort(half, last);
+  Merge(first, half, half, last);
 }
 }
