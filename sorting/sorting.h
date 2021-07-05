@@ -22,30 +22,29 @@ namespace gdr {
 
 template <class RandomAccessIterator>
 void QuickSort(RandomAccessIterator first, RandomAccessIterator last) {
-  if (last - first < 2) {
-    return;
-  }
-  auto left_border  = first - 1;
-  auto base_it = first;
-  auto base    = *first;
+	if (last - first < 2) {
+		return;
+	}
+	auto left_border  = first - 1;
+	auto base = first;
 
-  ++first;
-  while (first != last) {
-    if (*first < base) {
-      auto save = *first;
-      auto it = first - 1;
+	++first;
+	while (first != last) {
+		if (*first < *base) {
+			auto save = *first;
+			auto it = first - 1;
 
-      while (it != left_border) {
-        *(it + 1) = *it;
-        --it;
-      }
-      *(it + 1) = save;
-      ++base_it;
-    }
-    ++first;
-  }
-  QuickSort(left_border + 1, base_it);
-  QuickSort(base_it + 1, last);
+			while (it != left_border) {
+				*(it + 1) = *it;
+				--it;
+			}
+			*(it + 1) = save;
+			++base;
+		}
+		++first;
+	}
+	QuickSort(left_border + 1, base);
+	QuickSort(base + 1, last);
 }
 
 /*!
@@ -63,35 +62,35 @@ void QuickSort(RandomAccessIterator first, RandomAccessIterator last) {
 template<class RandomAccessIterator>
 void Merge(RandomAccessIterator first1, RandomAccessIterator last1,
            RandomAccessIterator first2, RandomAccessIterator last2) {
-  using value_type = typename std::iterator_traits<
-    RandomAccessIterator>::value_type;
+	using value_type = typename std::iterator_traits<
+		RandomAccessIterator>::value_type;
 
-  auto begin = first1;
-  auto len = (last1 - first1) + (last2 - first2);
-  std::vector<value_type> b;
+	auto begin = first1;
+	auto len = (last1 - first1) + (last2 - first2);
+	std::vector<value_type> b;
 
-  b.reserve(len);
-  while (first1 != last1 && first2 != last2) {
-    if (*first2 < *first1) {
-      b.emplace_back(*first2);
-      ++first2;
-    } else {
-      b.emplace_back(*first1);
-      ++first1;
-    }
-  }
-  while (first1 != last1) {
-    b.emplace_back(*first1);
-    ++first1;
-  }
-  while (first2 != last2) {
-    b.emplace_back(*first2);
-    ++first2;
-  }
-  for (auto &i : b) {
-    *begin = i;
-    ++begin;
-  }
+	b.reserve(len);
+	while (first1 != last1 && first2 != last2) {
+		if (*first2 < *first1) {
+			b.emplace_back(*first2);
+			++first2;
+		} else {
+			b.emplace_back(*first1);
+			++first1;
+		}
+	}
+	while (first1 != last1) {
+		b.emplace_back(*first1);
+		++first1;
+	}
+	while (first2 != last2) {
+		b.emplace_back(*first2);
+		++first2;
+	}
+	for (auto &i : b) {
+		*begin = i;
+		++begin;
+	}
 }
 
 /*!
@@ -107,14 +106,14 @@ void Merge(RandomAccessIterator first1, RandomAccessIterator last1,
 
 template<class RandomAccessIterator>
 void MergeSort(RandomAccessIterator first, RandomAccessIterator last) {
-  auto len = last - first;
+	auto len = last - first;
 
-  if (len < 2) {
-    return;
-  }
-  auto half = first + len / 2 + (len % 2);
-  MergeSort(first, half);
-  MergeSort(half, last);
-  Merge(first, half, half, last);
+	if (len < 2) {
+		return;
+	}
+	auto half = first + len / 2 + (len % 2);
+	MergeSort(first, half);
+	MergeSort(half, last);
+	Merge(first, half, half, last);
 }
 }

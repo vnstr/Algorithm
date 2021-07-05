@@ -12,41 +12,46 @@
 
 template<class T>
 void PrintVector(const std::vector<T> &v) {
-  std::cout << " ";
-  for (auto &i : v) {
-   std::cout << i << " ";
-  }
+	std::cout << " ";
+	for (auto &i : v) {
+		std::cout << i << " ";
+	}
 }
 
 uint32_t Gen() {
-  static std::vector<int> reminder;
-  int val = rand() % GEN_MAX;
-  auto found = std::find(reminder.begin(), reminder.end(), val);
+	static std::vector<int> reminder;
+	int val = rand() % GEN_MAX;
+	auto found = std::find(reminder.begin(), reminder.end(), val);
 
-  while (found != reminder.end()) {
-    val = rand() % GEN_MAX;
-    found = std::find(reminder.begin(), reminder.end(), val);
-  }
-  reminder.emplace_back(val);
-  return val;
+	while (found != reminder.end()) {
+		val = rand() % GEN_MAX;
+		found = std::find(reminder.begin(), reminder.end(), val);
+	}
+	reminder.emplace_back(val);
+	return val;
 }
 
 void SortingTest() {
 	std::cout << "SortingTest" << std::endl;
-  std::vector<uint32_t> vector(10);
+	std::vector<uint32_t> vector(10);
 
-  std::generate(vector.begin(), vector.end(), Gen);
+	std::generate(vector.begin(), vector.end(), Gen);
+	std::vector<uint32_t> copy(vector);
 
-  std::cout << "Before:\n[";
-  PrintVector(vector);
-  std::cout << "]" << std::endl;
+	std::cout << "Before:\n[";
+	PrintVector(vector);
+	std::cout << "]" << std::endl;
 
-  gdr::QuickSort(vector.begin(), vector.end());
+	gdr::QuickSort(vector.begin(), vector.end());
+	gdr::MergeSort(copy.begin(), copy.end());
 
-  std::cout << "After:\n[";
-  PrintVector(vector);
-  std::cout << "]" << std::endl;
-	std::cout << "-----------" << std::endl;
+	std::cout << "After QuickSort:\n[";
+	PrintVector(vector);
+	std::cout << "]" << std::endl;	std::cout << "-----------" << std::endl;
+
+	std::cout << "After MergeSort:\n[";
+	PrintVector(copy);
+	std::cout << "]" << std::endl;	std::cout << "-----------" << std::endl;
 }
 
 void BinarySearchTest() {
@@ -71,8 +76,8 @@ void BinarySearchTest() {
 }
 
 int main() {
-  srand(time(nullptr));
+	srand(time(nullptr));
 	SortingTest();
 	BinarySearchTest();
-  return 0;
+	return 0;
 }
