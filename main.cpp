@@ -19,16 +19,7 @@ void PrintVector(const std::vector<T> &v) {
 }
 
 uint32_t Gen() {
-	static std::vector<int> reminder;
-	int val = rand() % GEN_MAX;
-	auto found = std::find(reminder.begin(), reminder.end(), val);
-
-	while (found != reminder.end()) {
-		val = rand() % GEN_MAX;
-		found = std::find(reminder.begin(), reminder.end(), val);
-	}
-	reminder.emplace_back(val);
-	return val;
+	return rand() % GEN_MAX;
 }
 
 void SortingTest() {
@@ -75,9 +66,39 @@ void BinarySearchTest() {
 	std::cout << "----------------" << std::endl;
 }
 
+void RotateToLeftTest() {
+	const int size  = 5;
+	int       diffs = 0;
+	for (int i = 0; i < 3; ++i) {
+		std::vector<int> mouse;
+		std::vector<int> copy;
+
+		for (int i = 0; i < size; ++i) {
+			int val = Gen();
+			mouse.emplace_back(val);
+			copy.emplace_back(val);
+		}
+		int middle = Gen() % size;
+		std::rotate(mouse.begin(), mouse.begin() + middle, mouse.end());
+		gdr::RotateToLeft(copy.begin(), copy.begin() + middle, copy.end());
+
+		for (int i = 0; i < size; ++i) {
+			if (mouse[i] != copy[i]) {
+				++diffs;
+			}
+		}
+	}
+	if (diffs) {
+		std::cout << "RotateToLeftTest: FAILED" << std::endl;
+	} else {
+		std::cout << "RotateToLeftTest: OK" << std::endl;
+	}
+}
+
 int main() {
 	srand(time(nullptr));
 	SortingTest();
 	BinarySearchTest();
+	RotateToLeftTest();
 	return 0;
 }

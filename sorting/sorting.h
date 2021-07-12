@@ -4,10 +4,41 @@
 
 #pragma once
 
+#include <cstdint>
 #include <iterator>
 #include <utility>
 
 namespace gdr {
+
+/*!
+ * Rotates the order of the elements in the range [first,last),
+ * in such a way that the element pointed by middle becomes
+ * the new first element.
+ * @tparam ForwardIterator
+ * @param first first initial position.
+ * @param middle element wich becomes first.
+ * @param last final position.
+ * @return none
+ * Complexity:
+ *  worst case O(n).
+ */
+
+template <class ForwardIterator>
+void RotateToLeft(ForwardIterator first, ForwardIterator middle,
+                  ForwardIterator last) {
+	ForwardIterator next = middle;
+
+	while (first != next) {
+		std::swap(*first, *next);
+		++first;
+		++next;
+		if (next == last) {
+			next = middle;
+		} else if (first == middle) {
+			middle = next;
+		}
+	}
+}
 
 /*!
  * Sorts items between [first, last).
